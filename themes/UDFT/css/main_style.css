@@ -1,0 +1,76 @@
+@font-face {
+    font-family: 'Baskerville SemiBold';
+    src: url('fonts/Baskerville SemiBold.eot');
+    src: url('fonts/Baskerville SemiBold.woff') format('woff'),
+    url('fonts/Baskerville SemiBold.eot?#iefix') format('embedded-opentype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+
+@font-face {
+    font-family: 'Tiempos';
+    src: url('fonts/TiemposHeadline-Medium.eot');
+    src: url('fonts/TiemposHeadline-Medium.woff') format('woff'),
+    url('fonts/TiemposHeadline-Medium.eot?#iefix') format('embedded-opentype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+
+@font-face {
+    font-family: 'Proxima Nova';
+    src: url('fonts/ProximaNova-Semibold.eot');
+    src: url('fonts/ProximaNova-Semibold.woff') format('woff'),
+    url('fonts/ProximaNova-Semibold.eot?#iefix') format('embedded-opentype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+
+
+body { font-family: Georgia, 'Times New Roman', Times, serif; }
+.container { max-width : 1140px; }
+ul { list-style : none; margin : 0; padding : 0; }
+a, a:focus, a:hover { text-decoration : none; }
+.blue { color : #50a5d1; }
+
+.full-width { width: calc(100vw - 10px); position: relative; margin-left: -50vw; left: 50%; }
+
+
+
+@media screen and ( max-width : 1187px ) {
+
+}
+
+
+@media screen and ( max-width : 992px ) {
+
+}
+
+
+@media screen and ( max-width : 768px ) {
+
+}
+
+
+@media screen and ( max-width : 640px ) {
+
+}
+
+
+@media screen and ( max-width : 480px ) {
+
+}
+
+@media screen and ( max-width : 360px ) {
+    .page-thank-you .header-text-box a.mhf { font-size : 18px; }
+}
+
+
+@media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
+
+}
+
+
+
