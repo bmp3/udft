@@ -298,63 +298,7 @@ Redux::setSection( $opt_name, array(
 
 $widgets = udft::redux_get_widget_select();
 
-Redux::setSection( $opt_name, array(
-    'title'      => __( 'Footer Settings', 'redux-framework-demo' ),
-    'id'         => 'footer-settings',
-    'desc'       => '',
-    'subsection' => true,
-    'fields'     => array(
-        array(
-            'id'       => 'footer-widget-qt',
-            'type'     => 'select',
-            'title'    => __('Footer Widget Quontity', 'redux-framework-demo'),
-            'desc'     => __('Footer Widget Quontity ( up to 4 )', 'redux-framework-demo'),
-            'options'  => array(
-                '1' => '1',
-                '2' => '2',
-                '3' => '3',
-                '4' => '4'
-            ),
-            'default'  => '3',
-        ),
-        array(
-            'id'       => 'footer-widget-1',
-            'type'     => 'select',
-            'title'    => __('Footer Widget 1', 'redux-framework-demo'),
-            'desc'     => __('', 'redux-framework-demo'),
-            'options'  => $widgets,
-            'default'  => array_keys($widgets)[0],
-            'required' => array( 'footer-widget-qt', '>=', 1 )
-        ),
-        array(
-            'id'       => 'footer-widget-2',
-            'type'     => 'select',
-            'title'    => __('Footer Widget 2', 'redux-framework-demo'),
-            'desc'     => __('', 'redux-framework-demo'),
-            'options'  => $widgets,
-            'default'  => array_keys($widgets)[1],
-            'required' => array( 'footer-widget-qt', '>=', 2 )
-        ),
-        array(
-            'id'       => 'footer-widget-3',
-            'type'     => 'select',
-            'title'    => __('Footer Widget 3', 'redux-framework-demo'),
-            'desc'     => __('', 'redux-framework-demo'),
-            'options'  => $widgets,
-            'default'  => array_keys($widgets)[2],
-            'required' => array( 'footer-widget-qt', '>=', 3 )
-        ),
-        array(
-            'id'       => 'footer-widget-4',
-            'type'     => 'select',
-            'title'    => __('Footer Widget 4', 'redux-framework-demo'),
-            'desc'     => __('', 'redux-framework-demo'),
-            'options'  => $widgets,
-            'default'  => array_keys($widgets)[3],
-            'required' => array( 'footer-widget-qt', '>=', 4 )
-        ),
-    )
-)  );
+
 
 
 

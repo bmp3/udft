@@ -1,10 +1,16 @@
-.kmwp-post-settings {}
+.tabs-box {}
+.tabs-nav {}
+.tab-item { display : inline-block; }
+.tab-item:hover { cursor : pointer; }
+.tab-item .tab-a { }
 
-.tabs-box { }
-.tabs-box .tab-nav {}
-.tabs-box .tab-item { text-align : center; }
-.tabs-box .tab-item:hover { cursor : pointer; }
-.tabs-box .tab-a {}
-.tabs-box .tabs-content {}
-.tabs-box .tab-content-item {}
-.tabs-box .tab-item {}
+.tab-contents { }
+.tab-content-item { display : none; }
+.tab-content-item.active { display : block; }
+.tab-item-box { }
+
+.tab-select-box {}
+.tab-select {}
+.tab-select-values { }
+.tab-select-item { display : none; }
+.tab-select-item.active { display : block; }

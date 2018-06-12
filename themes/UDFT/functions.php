@@ -305,7 +305,7 @@ class UDFT {
                 </div> 
                 <div class="tab-contents">
                     <div class="tab-content-item" data-target="layout">
-                        <div class="tab-item">
+                        <div class="tab-item-box">
                             <div class="width-layout row">
                                 <div class="control-title col">Choose page layout</div>
                                 <div class="control-values col">
@@ -327,7 +327,7 @@ class UDFT {
                         </div>
                     </div>
                     <div class="tab-content-item" data-target="header">
-                        <div class="tab-item">
+                        <div class="tab-item-box">
                             <div class="tab-select-box header-content">
                                 <select class="tab-select">
                                     <option value="' . '1' . '" ' . selected( 1, $meta['header-type'], false ) . ' data-target="1">' . 'background-image' . '</option>
@@ -343,12 +343,12 @@ class UDFT {
                         </div>
                     </div>
                     <div class="tab-content-item" data-target="content">
-                        <div class="tab-item">
+                        <div class="tab-item-box">
                         
                         </div>
                     </div>
                     <div class="tab-content-item" data-target="footer">
-                        <div class="tab-item">
+                        <div class="tab-item-box">
                         
                         </div>
                     </div>                                      
