@@ -298,6 +298,15 @@ Redux::setSection( $opt_name, array(
 
 $widgets = udft::redux_get_widget_select();
 
+global $udft;
+$udft['fields'] = array(
+    'width-layout',
+    'sidebar-layout',
+    'header-type',
+    'header-bg',
+    'header-slider'
+);
+
 
 
 

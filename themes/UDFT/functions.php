@@ -68,7 +68,6 @@ class UDFT {
 		) );
 
 		add_filter( 'body_class', 'udft::custom_class_names' );
-		$udft['post-fields'] = array( 'width-layout', 'sidebar-layout', 'header-bg', 'header-content', 'header-text-img', 'header-form-img', 'thank-you-img' );
 
 	}
 
@@ -212,37 +211,41 @@ class UDFT {
 	}
 
 
-	static function correct_global_var( $global = null, $meta = null ) {
+	static function correct_global_var( $global = null, $meta = null, $p = null ) {
 
 		global $post, $udft;
 
-		if ( ! $global ) {
-			$global = $udft;
+        if ( ! $global ) {
+            $global = $udft;
+        }
+
+		if ( !$p ) {
+			if ( $post ) {
+				$p = $post;
+			}
+			else {
+				return $global;
+			}
 		}
 
-		if ( $post && $post->ID ) {
-			$self             = array();
-			$fields           = array(
-				'width-layout',
-				'sidebar-layout',
-				'header-bg',
-				'header-content',
-				'header-text-img',
-				'header-form-img',
-				'thank-you-img'
-			);
-			$global['fields'] = $fields;
-			foreach ( $fields as $i => $field ) {
-				$val = null; //get_field( $field, $post->ID );
-				if ( $val ) {
-					$self[ $field ] = $val;
+		if ( $p && $p->ID ) {
+			if ( !$meta ) {
+				$meta = json_decode( get_post_meta( $p->ID, 'post-settings', true ), true );
+			}
+			if ( !$meta || $meta == '' ) {
+                return $global;
+            }
+            else {
+				foreach( $udft['fields'] as $i => $name ) {
+					if ( isset( $meta[$name] ) ) {
+						if ( $name == 'header-bg' ) {
+							$meta[$name] = array( 'id' => $meta[$name], 'url' => wp_get_attachment_image_src( $meta[$name], 'full' )[0] );
+						}
+						$global[$name] = $meta[$name];
+					}
 				}
 			}
-			foreach ( $self as $index => $value ) {
-				if ( isset ( $global[ $index ] ) ) {
-					$global[ $index ] = $value;
-				}
-			}
+
 		}
 
 		return $global;
@@ -285,9 +288,7 @@ class UDFT {
 
 		global $post, $udft;
 
-		$meta = get_post_meta( $post->ID, 'post-settings', true );
-		if ( $meta != '') $meta = json_decode( $meta, true ); else $meta = array();
-		$meta = udft::correct_global_var( $udft, $meta );
+        $meta = udft::correct_global_var();
 
 		$out =
 			'<div class="udft-post-settings">
@@ -306,15 +307,15 @@ class UDFT {
                 <div class="tab-contents">
                     <div class="tab-content-item" data-target="layout">
                         <div class="tab-item-box">
-                            <div class="width-layout row">
+                            <div class="width-layout img-controls-box row">
                                 <div class="control-title col">Choose page layout</div>
                                 <div class="control-values col">
                                     <div class="control-value img-control" data-value="1"><img src="' . get_template_directory_uri() . '/img/admin/full.gif' . '"></div>
                                     <div class="control-value img-control" data-value="2"><img src="' . get_template_directory_uri() . '/img/admin/boxed.gif' . '"></div> 
                                 </div> 
-                                <input class="ps-input" name="ps[width-layout]" value="' . $meta['width-layout']. '">                           
+                                <input class="ps-input img-control-receiver" name="ps[width-layout]" value="' . $meta['width-layout']. '">                           
                             </div>
-                            <div class="sidebar-layout row">
+                            <div class="sidebar-layout img-controls-box row">
                                 <div class="control-title col">Choose sidebar layout</div>
                                 <div class="control-values col">
                                     <div class="control-value img-control" data-value="1"><img src="' . get_template_directory_uri() . '/img/admin/nosidebar.gif' . '"></div>
@@ -322,7 +323,7 @@ class UDFT {
                                     <div class="control-value img-control" data-value="3"><img src="' . get_template_directory_uri() . '/img/admin/leftsidebar.gif' . '"></div>
                                     <div class="control-value img-control" data-value="4"><img src="' . get_template_directory_uri() . '/img/admin/rightsidebar.gif' . '"></div>   
                                 </div> 
-                                <input class="ps-input" name="ps[sidebar-layout]" value="' . $meta['sidebar-layout']. '">                           
+                                <input class="ps-input img-control-receiver" name="ps[sidebar-layout]" value="' . $meta['sidebar-layout']. '">                           
                             </div>                            
                         </div>
                     </div>
@@ -334,10 +335,22 @@ class UDFT {
                                     <option value="' . '2' . '" ' . selected( 2, $meta['header-type'], false ) . ' data-target="2">' . 'slider' . '</option>
                                 </select>
                                <div class="tab-select-values">
-                                   <div class="tab-select-item" data-value="1">
+                                   <div class="tab-select-item ' . udft::get_active_css_class( 1,  $meta['header-type'] ) . '" data-value="1">
+                                   	   <div class="event_control imgs_control">;
+	                                       <button class="add_img_control">add image select</button>';
+	                                       if ( isset( $meta['header-bg'] ) && is_int(  $meta['header-bg'] )) {
+                                               foreach ($set['images'] as $id) {
+                                                   $out .= udft::set_img_control( $id, 'ps["header-bg"]' );
+                                               }
+                                           }
+	                                       else {
+		                                       $out .= udft::set_img_control( $meta['header-bg']['id'], 'ps["header-bg"]' );
+	                                       }
+	                                   $out .= '</div>                                       
                                    </div>
-                                   <div class="tab-select-item" data-value="2">
-                                   </div>
+                                   <div class="tab-select-item ' . udft::get_active_css_class( 2,  $meta['header-type'] ) . '" data-value="2">' .
+                                       '' .
+                                   '</div>
                                </div>
                             </div>
                         </div>
@@ -360,6 +373,29 @@ class UDFT {
 
 	}
 
+
+    static function set_img_control ( $id = null, $name ) {
+
+        $out = '<div class="img_control">';
+        if ( $id ) { $bg = 'style="background-image:url(' . wp_get_attachment_image_src( $id, 'full' )[0] . ');"'; $val = $id; }
+        else { $val = ''; $bg = ''; }
+        $out .= '<div class="img_prv" ' . $bg . '></div>';
+        $out .= '<input type="hidden" value="' . $val . '" name=' . $name . '>';
+        $out .= '<button class="img_change">change image</button>';
+        $out .= '<button class="img_remove">remove image</button>';
+        $out .= '</div>';
+
+        return $out;
+
+    }
+
+
+    static function get_active_css_class( $base, $var ) {
+		if ( $var == $base ) return 'active';
+		return '';
+	}
+
+
 	static function save_post_settings(){
 
 		global $post, $udft;
@@ -375,7 +411,7 @@ class UDFT {
 		}
 
 		if ( isset( $_POST['reset-ps'] ) && $_POST['reset-ps'] == 1 ) {
-			$fields = $udft['post-fields'];
+			$fields = $udft['fields'];
 			foreach ( $fields as $f ) {
 				delete_field( $f, $post->ID);
 			}

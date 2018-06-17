@@ -14,3 +14,9 @@
 .tab-select-values { }
 .tab-select-item { display : none; }
 .tab-select-item.active { display : block; }
+
+
+.img-control { display : inline-block; }
+.img_prv { width : 150px; height : 150px; background-size : cover; }
+.tab-select-item { display : none; }
+.tab-select-item.active { display : block; }
