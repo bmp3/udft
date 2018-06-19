@@ -10,6 +10,7 @@ error_reporting(E_ALL);
 
 require_once ( 'inc/redux-config.php' );
 
+
 if (function_exists('add_theme_support'))
 {
 
@@ -40,6 +41,14 @@ class UDFT {
 	static function init() {
 
 		global $udft;
+
+		$udft['fields'] = array(
+			'width-layout',
+			'sidebar-layout',
+			'header-type',
+			'header-bg',
+			'header-slider'
+		);
 
 		add_filter( 'widget_text', 'do_shortcode' );
 
@@ -334,17 +343,18 @@ class UDFT {
                                     <option value="' . '1' . '" ' . selected( 1, $meta['header-type'], false ) . ' data-target="1">' . 'background-image' . '</option>
                                     <option value="' . '2' . '" ' . selected( 2, $meta['header-type'], false ) . ' data-target="2">' . 'slider' . '</option>
                                 </select>
+                                <input class="ps-input header-type-receiver" name="ps[header-type]" value="' . $meta['header-type']. '">
                                <div class="tab-select-values">
                                    <div class="tab-select-item ' . udft::get_active_css_class( 1,  $meta['header-type'] ) . '" data-value="1">
-                                   	   <div class="event_control imgs_control">;
+                                   	   <div class="event_control imgs_control">
 	                                       <button class="add_img_control">add image select</button>';
 	                                       if ( isset( $meta['header-bg'] ) && is_int(  $meta['header-bg'] )) {
                                                foreach ($set['images'] as $id) {
-                                                   $out .= udft::set_img_control( $id, 'ps["header-bg"]' );
+                                                   $out .= udft::set_img_control( $id, 'ps[header-bg]' );
                                                }
                                            }
 	                                       else {
-		                                       $out .= udft::set_img_control( $meta['header-bg']['id'], 'ps["header-bg"]' );
+		                                       $out .= udft::set_img_control( $meta['header-bg']['id'], 'ps[header-bg]' );
 	                                       }
 	                                   $out .= '</div>                                       
                                    </div>
@@ -400,20 +410,31 @@ class UDFT {
 
 		global $post, $udft;
 
-		if ( isset( $_POST['ps'] ) && is_array( $_POST['ps'] ) ) {
-			if ( $_POST['reset-ps'] == 0 && $_POST['ps-changed'] == 1 ) {
-				$ps = json_encode($_POST['ps']);
-				update_post_meta($post->ID, 'post-settings', $ps);
-			}
-			else if ( $_POST['reset-ps'] == 1 ) {
-				delete_post_meta( $post->ID, 'post-settings' );
+		$has_self_data = false;
+
+		foreach ( $udft['fields'] as $i => $field ) {
+			if ( isset( $_POST['ps'][$field] ) && isset( $udft[$field] ) ) {
+				if ( !is_array( $udft[$field] ) ) {
+					if ( $_POST['ps'][$field] != $udft[$field] ) {
+						$has_self_data = true;
+					}
+				}
+				else if ( is_array( $udft[$field] ) ) {
+                    if ( $udft[$field]['id'] != $_POST['ps'][$field] ) {
+	                    $has_self_data = true;
+                    }
+				}
 			}
 		}
 
-		if ( isset( $_POST['reset-ps'] ) && $_POST['reset-ps'] == 1 ) {
-			$fields = $udft['fields'];
-			foreach ( $fields as $f ) {
-				delete_field( $f, $post->ID);
+		if ( isset( $_POST['ps'] ) && is_array( $_POST['ps'] ) ) {
+			if ( $_POST['reset-ps'] == 1 ) {
+				delete_post_meta( $post->ID, 'post-settings' );
+				return;
+			}
+			if ( $has_self_data ) {
+				$ps = json_encode($_POST['ps']);
+				update_post_meta($post->ID, 'post-settings', $ps);
 			}
 		}
 

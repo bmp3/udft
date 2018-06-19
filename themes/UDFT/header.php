@@ -34,6 +34,10 @@
 						</a>
 					</div>
 
+                    <div class="slider-box">
+                        <?php echo do_shortcode('[metaslider id="7"]'); ?>
+                    </div>
+
 					<nav class="nav" role="navigation">
 						<?php wp_nav_menu(); ?>
 					</nav>

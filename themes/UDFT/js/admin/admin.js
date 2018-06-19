@@ -36,6 +36,7 @@ jQuery(document).ready( function($) {
                 $(trg).addClass('active');
                 trg = null;
             }
+            $(e.target).parents('.tab-select-box').find('input.ps-input').val($(e.target).val());
         });
 
     });
@@ -85,6 +86,10 @@ jQuery(document).ready( function($) {
 
         return false;
 
+    });
+
+    $('.reset-post-settings').on( 'click', function( e ) {
+        $('.ps-reset').val(1);
     });
 
 
