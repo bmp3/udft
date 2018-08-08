@@ -354,7 +354,8 @@ class UDFT {
                                                }
                                            }
 	                                       else {
-		                                       $out .= udft::set_img_control( $meta['header-bg']['id'], 'ps[header-bg]' );
+	                                       	   $id = isset( $meta['header-bg']['id'] ) ? $meta['header-bg']['id'] : null;
+		                                       $out .= udft::set_img_control( $id, 'ps[header-bg]' );
 	                                       }
 	                                   $out .= '</div>                                       
                                    </div>
