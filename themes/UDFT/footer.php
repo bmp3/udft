@@ -1,4 +1,5 @@
             <?php
+            global $udft;
                 udft::finish_content_layout();
             ?>
 
@@ -9,10 +10,19 @@
 
 			<footer class="footer" role="contentinfo">
 
+                <div class="footer-box container">
+                    <div class="footer-content-row row">
+                        <div class="footer-logo col-lg-12">
+                            <a href="<?php echo site_url(); ?>"><img src="<?php echo $udft['header-logo']['url']; ?>"></a>
+                        </div>
+                    </div>
+                </div>
 
 			</footer>
 
-		</div>
+            </div> <!-- site-wrapper -->
+
+		</div> <!-- wrapper -->
 
 		<?php wp_footer(); ?>
 

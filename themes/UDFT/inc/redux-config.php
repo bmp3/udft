@@ -36,8 +36,8 @@ $args = array(
 	//Specify if the admin menu should appear or not. Options: menu or submenu (Under appearance only)
 	'allow_sub_menu'       => true,
 	// Show the sections below the admin menu item or not
-	'menu_title'           => __( 'Extended Settings', 'redux-framework-demo' ),
-	'page_title'           => __( 'Extended Settings', 'redux-framework-demo' ),
+	'menu_title'           => __( 'Extended Settings', 'tpl' ),
+	'page_title'           => __( 'Extended Settings', 'tpl' ),
 	// You will need to generate a Google API key to use this feature.
 	// Please visit: https://developers.google.com/fonts/docs/developer_api#Auth
 	'google_api_key'       => '',
@@ -142,13 +142,13 @@ if ( ! isset( $args['global_variable'] ) || $args['global_variable'] !== false )
 	} else {
 		$v = str_replace( '-', '_', $args['opt_name'] );
 	}
-	$args['intro_text'] = sprintf( __( '<p>Did you know that Redux sets a global variable for you? To access any of your saved options from within your code you can use your global variable: <strong>$%1$s</strong></p>', 'redux-framework-demo' ), $v );
+	$args['intro_text'] = sprintf( __( '<p>Did you know that Redux sets a global variable for you? To access any of your saved options from within your code you can use your global variable: <strong>$%1$s</strong></p>', 'tpl' ), $v );
 } else {
-	$args['intro_text'] = __( '<p>This text is displayed above the options panel. It isn\'t required, but more info is always better! The intro_text field accepts all HTML.</p>', 'redux-framework-demo' );
+	$args['intro_text'] = __( '<p>This text is displayed above the options panel. It isn\'t required, but more info is always better! The intro_text field accepts all HTML.</p>', 'tpl' );
 }
 
 // Add content after the form.
-$args['footer_text'] = __( '<p>This text is displayed below the options panel. It isn\'t required, but more info is always better! The footer_text field accepts all HTML.</p>', 'redux-framework-demo' );
+$args['footer_text'] = __( '<p>This text is displayed below the options panel. It isn\'t required, but more info is always better! The footer_text field accepts all HTML.</p>', 'tpl' );
 
 Redux::setArgs( $opt_name, $args );
 
@@ -163,23 +163,23 @@ Redux::setArgs( $opt_name, $args );
 // -> START Basic Fields
 
 Redux::setSection( $opt_name, array(
-	'title'            => __( 'General Section', 'redux-framework-demo' ),
+	'title'            => __( 'General Section', 'tpl' ),
 	'id'               => 'general-box',
-	'desc'             => __( 'General Section', 'redux-framework-demo' ),
+	'desc'             => __( 'General Section', 'tpl' ),
 	'icon'             => 'el el-home'
 ) );
 
 Redux::setSection( $opt_name, array(
-	'title'      => __( 'General Section', 'redux-framework-demo' ),
+	'title'      => __( 'General Section', 'tpl' ),
 	'id'         => 'general',
-	'desc'       => __( 'General Site Settings' ),
+	'desc'       => __( 'General Site Settings', 'tpl' ),
 	'subsection' => true,
     'fields' => array(
 
             array(
                 'id'       => 'width-layout',
                 'type'     => 'image_select',
-                'title'    => esc_attr__( 'Choose page layout', 'the-seo' ),
+                'title'    => esc_attr__( 'Choose page layout', 'tpl' ),
                 'options'  => array(
                     '1' => array(
                         'alt' => 'Full width layout',
@@ -196,7 +196,7 @@ Redux::setSection( $opt_name, array(
             array(
                 'id'       => 'sidebar-layout',
                 'type'     => 'image_select',
-                'title'    => esc_attr__( 'Choose sidebar option', 'the-seo' ),
+                'title'    => esc_attr__( 'Choose sidebar option', 'tpl' ),
                 'options'  => array(
                     '1' => array(
                         'alt' => 'Without sidebar',
@@ -218,46 +218,37 @@ Redux::setSection( $opt_name, array(
                 'default'  => '1'
             ),
 
-	        array(
-			'id'          => 'main-font',
-			'type'        => 'typography',
-			'title'       => __('Site Font', 'redux-framework-demo'),
-			'google'      => true,
-			'font-backup' => true,
-			'units'       =>'px',
-			'subtitle'    => __('Typography option with each property can be called individually.', 'redux-framework-demo'),
-			'default'     => array(
-				'color'       => '#333',
-				'font-style'  => '700',
-				'font-family' => 'Abel',
-				'google'      => true,
-				'font-size'   => '33px',
-				'line-height' => '40'
-			    )
-		    ),
-
 	)
 ) );
 
 
 Redux::setSection( $opt_name, array(
-	'title' => __( 'Header Section', 'redux-framework-demo' ),
+	'title' => __( 'Header Section', 'tpl' ),
 	'id'    => 'header-settings-box',
-	'desc'  => __( '', 'redux-framework-demo' ),
+	'desc'  => __( '', 'tpl' ),
 	'icon'  => 'el el-picture'
 ) );
 
 Redux::setSection( $opt_name, array(
-	'title'      => __( 'Header Settings', 'redux-framework-demo' ),
+	'title'      => __( 'Header Settings', 'tpl' ),
 	'id'         => 'header-settings',
 	'desc'       => '',
 	'subsection' => true,
 	'fields'     => array(
         array(
+            'id'       => 'header-logo',
+            'type'     => 'media',
+            'url'      => true,
+            'title'    => __( 'Header Logo', 'tpl' ),
+            'subtitle' => __( 'Set Logo', 'tpl' ),
+            'url'      => true,
+            'default'  => array( 'url' => 'http://s.wordpress.org/style/images/codeispoetry.png' ),
+        ),
+        array(
             'id'       => 'header-type',
             'type'     => 'select',
-            'title'    => __('Header Type', 'redux-framework-demo'),
-            'desc'     => __('Select Header Type', 'redux-framework-demo'),
+            'title'    => __('Header Type', 'tpl'),
+            'desc'     => __('Select Header Type', 'tpl'),
             'options'  => array(
                 '1' => 'Background Image',
                 '2' => 'Slider',
@@ -268,35 +259,17 @@ Redux::setSection( $opt_name, array(
 			'id'       => 'header-bg',
 			'type'     => 'media',
 			'url'      => true,
-			'title'    => __( 'Header Background', 'redux-framework-demo' ),
-			'desc'     => __( 'Basic media uploader with disabled URL input field.', 'redux-framework-demo' ),
-			'subtitle' => __( 'Upload any media using the WordPress native uploader', 'redux-framework-demo' ),
+			'title'    => __( 'Header Background', 'tpl' ),
+			'desc'     => __( 'Basic media uploader with disabled URL input field.', 'tpl' ),
+			'subtitle' => __( 'Upload any media using the WordPress native uploader', 'tpl' ),
 			'url'      => true,
 			'default'  => array( 'url' => 'http://s.wordpress.org/style/images/codeispoetry.png' ),
             'required' => array( 'header-type', '=',  1 )
 		),
-        array(
-            'id'       => 'header-slider',
-            'type'     => 'select',
-            'title'    => __('Header Slider', 'redux-framework-demo'),
-            'desc'     => __('Select Header Slider', 'redux-framework-demo'),
-            'options'  => udft::get_theme_sliders(),
-            'default'  => '1',
-            'required' => array( 'header-type', '=', 2 )
-        ),
 	)
 ) );
 
 
-
-Redux::setSection( $opt_name, array(
-    'title' => __( 'Footer Section', 'redux-framework-demo' ),
-    'id'    => 'footer-settings-box',
-    'desc'  => __( '', 'redux-framework-demo' ),
-    'icon'  => 'el el-picture'
-) );
-
-$widgets = udft::redux_get_widget_select();
 
 
 

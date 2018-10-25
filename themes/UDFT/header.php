@@ -26,36 +26,32 @@
 
 		<div class="wrapper">
 
-			<header class="header clear" role="banner">
+            <div class="side-menu-box">
+                <nav class="nav" role="navigation">
+                    <?php wp_nav_menu( array( 'menu' => 'top-menu', 'container_class' => 'side-menu' ) ); ?>
+                </nav>
+            </div>
 
-					<div class="logo">
-						<a href="<?php echo home_url(); ?>">
-							<img src="<?php echo get_template_directory_uri(); ?>/img/logo.svg" alt="Logo" class="logo-img">
-						</a>
-					</div>
+            <div class="site-wrapper">
 
-                    <div class="slider-box">
-                        <?php echo do_shortcode('[metaslider id="7"]'); ?>
-                    </div>
-
-					<nav class="nav" role="navigation">
-						<?php wp_nav_menu(); ?>
-					</nav>
-
-			</header>
-
-            <?php
-
-                global $udft;
-                $header_layout = udft::start_content_layout( false );
-
-                echo
-
-                '<div class="content-body-wrap ' . $udft['box-type'] . '">
-    
-                    <div class="content-wrap row">';
-
-                    echo $header_layout;
+                <header class="header clear" role="banner">
 
 
-            ?>
+
+                </header>
+
+                <?php
+
+                    global $udft;
+                    $header_layout = udft::start_content_layout( false );
+
+                    echo
+
+                    '<div class="content-body-wrap ' . $udft['box-type'] . '">
+        
+                        <div class="content-wrap row">';
+
+                        echo $header_layout;
+
+
+                ?>

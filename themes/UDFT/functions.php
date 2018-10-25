@@ -8,6 +8,8 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
+setlocale(LC_ALL, 'ru_RU', 'ru_RU.UTF-8', 'ru', 'russian');
+
 require_once ( 'inc/redux-config.php' );
 
 
@@ -25,7 +27,7 @@ if (function_exists('add_theme_support'))
 
     add_theme_support('automatic-feed-links');
 
-    load_theme_textdomain('thm-tpl', get_template_directory() . '/languages');
+    load_theme_textdomain('tpl', get_template_directory() . '/languages');
 }
 
 /*------------------------------------*\
@@ -55,10 +57,14 @@ class UDFT {
 		if ( ! is_admin() ) {
 
 			wp_enqueue_style( 'template_css', get_template_directory_uri() . '/css/template.css' );
-			wp_enqueue_style( 'bootstrap-template_css', get_template_directory_uri() . '/css/bootstrap-system.css' );
+			wp_enqueue_style( 'bootstrap-template_css', get_template_directory_uri() . '/css/bootstrap-grid.css' );
 			wp_enqueue_style( 'main_custom_css', get_template_directory_uri() . '/css/main_style.css' );
 			wp_enqueue_style( 'fontawesome_css', get_template_directory_uri() . '/css/font-awesome.css' );
+            wp_enqueue_style( 'slick_css', get_template_directory_uri() . '/inc/slick/slick.css' );
+            wp_enqueue_style( 'slick__theme_css', get_template_directory_uri() . '/inc/slick/slick-theme.css' );
 
+            wp_register_script( 'slick_js', get_template_directory_uri() . '/inc/slick/slick.js', array( 'jquery' ), false, true );
+            wp_enqueue_script( 'slick_js' );
 			wp_register_script( 'custom_js', get_template_directory_uri() . '/js/custom.js', array( 'jquery' ), false, true );
 			wp_enqueue_script( 'custom_js' );
 
@@ -77,6 +83,8 @@ class UDFT {
 		) );
 
 		add_filter( 'body_class', 'udft::custom_class_names' );
+
+        self::set_custom_post_types();
 
 	}
 
@@ -167,28 +175,6 @@ class UDFT {
 		} else {
 			return $out;
 		}
-
-	}
-
-
-	static function get_the_excerpt( $p = null, $apply_the_content = false ) {
-
-		global $post;
-		if ( is_int( $p ) ) {
-			$p = get_post( $p );
-		} else if ( is_object( $p ) ) {
-			$p = $p;
-		} else {
-			$p = $post;
-		}
-
-		$content = $p->post_content;
-		if ( $apply_the_content ) {
-			$content = apply_filters( 'the_content', $content );
-		}
-		$content = str_replace( ']]>', ']]&gt;', $content );
-
-		return $content;
 
 	}
 
@@ -442,42 +428,108 @@ class UDFT {
 	}
 
 
-	static function redux_get_widget_select() {
+    static function get_excerpt( $p = null, $n = 15 ) {
 
-        global $wp_registered_widgets;
+		global $post;
 
-        $sidebars = wp_get_sidebars_widgets();
+		if ( !$p ) $p = $post;
 
-        $widgets = array();
-        foreach ( $sidebars as $sidebar_name => $sidebar ) {
-        	foreach ( $sidebar as $j => $widget_id ) {
-        		if ( $sidebar_name != 'wp_inactive_widgets' ) {
-                    preg_match('/-\d+$/', $widget_id, $n);
-                    if (isset($n[0])) {
-                        $n = (int)str_replace('-', '', $n[0]);
-                        $widget_name = str_ireplace('-' . $n, '', $widget_id);
-                        $w = get_option('widget_' . $widget_name);
-                        if (is_array($w)) {
-                            $widgets[$widget_id] = $sidebar_name . ' - ' . $w[$n]['title'];
-                        }
-                    }
-                }
-            }
-		}
+        $content = $p->post_content;
+        $content = str_replace(']]>', ']]&gt;', $content);
+        $content = preg_replace( '/\[[^\]]+\]/U', '', $content );
 
-		return $widgets;
+        $content = explode( ' ', $content );
+        $content = implode( ' ', array_slice( $content, 0, $n ) );
 
-	}
+        return $content;
+
+    }
 
 
-	static function get_theme_sliders() {
+    static function set_custom_post_types()
+    {
 
-        $result = array( '1' => 'Slider 1', '2' => 'Slider 2' );
+        register_post_type('portfolio', array(
 
-        return $result;
+            'label' => 'portfolio',
+            'labels' => array(
+                'name' => 'Portfolio',
+                'singular_name' => __('portfolio', 'tpl'),
+                'add_new' => __('Add portfolios', 'tpl'),
+                'add_new_item' => __('Adding portfolio', 'tpl'),
+                'edit_item' => __('Edit portfolio', 'tpl'),
+                'new_item' => __('New portfolio', 'tpl'),
+                'view_item' => __('View portfolio', 'tpl'),
+                'search_items' => __('Search portfolio', 'tpl'),
+                'not_found' => __('Not found portfolios', 'tpl'),
+                'not_found_in_trash' => __('Not found portfolios in trash', 'tpl'),
+                'parent_item_colon' => '',
+                'menu_name' => 'Portfolios',
+            ),
+            'description' => '',
+            'public' => true,
+            'publicly_queryable' => true,
+            'exclude_from_search' => true,
+            'show_ui' => true,
+            'show_in_menu' => true,
+            'show_in_admin_bar' => true,
+            'show_in_nav_menus' => true,
+            'show_in_rest' => true,
+            'rest_base' => null,
+            'menu_position' => 40,
+            'hierarchical' => false,
+            'supports' => array('title', 'editor', 'excerpt', 'thumbnail'),
+            'has_archive' => true,
+            //'rewrite' => array( 'slug' => 'portfolio' ),
+            'query_var' => true,
 
-	}
+        ));
+
+        $labels = array(
+            'name' => _x('Portfolio Categories', 'taxonomy general name', 'tpl'),
+            'singular_name' => _x('Protfolio', 'taxonomy singular name', 'tpl'),
+            'search_items' => __('Search Protfolio Categories', 'tpl'),
+            'all_items' => __('All Protfolios', 'tpl'),
+            'parent_item' => __('Parent Protfolio', 'tpl'),
+            'parent_item_colon' => __('Parent Protfolio:', 'tpl'),
+            'edit_item' => __('Edit Protfolio', 'tpl'),
+            'update_item' => __('Update Protfolio', 'tpl'),
+            'add_new_item' => __('Add New Protfolio category', 'tpl'),
+            'new_item_name' => __('New Protfolio Name', 'tpl'),
+            'menu_name' => __('Protfolio categories', 'tpl'),
+        );
+
+        $args = array(
+            'hierarchical' => true,
+            'labels' => $labels,
+            'show_ui' => true,
+            'show_admin_column' => true,
+            'query_var' => true,
+            'rewrite' => array('slug' => 'portfolios'),
+        );
+
+        register_taxonomy('portfolios', array('portfolio'), $args);
+
+    }
 
 }
+
+/* CUSTOM */
+
+
+add_filter('upload_mimes', 'kmwp_mime_types');
+
+function kmwp_mime_types( $mimes ) {
+
+    $mimes['svg'] = 'image/svg+xml';
+    return $mimes;
+
+}
+
+
+
+
+
+
 
 ?>
